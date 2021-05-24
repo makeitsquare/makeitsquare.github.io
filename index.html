@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8 />
+    <title>Make It Square</title>
+    <script>
+        // fileSaver.min.js
+        (function(a,b){if("function"==typeof define&&define.amd)define([],b);else if("undefined"!=typeof exports)b();else{b(),a.FileSaver={exports:{}}.exports}})(this,function(){"use strict";function b(a,b){return"undefined"==typeof b?b={autoBom:!1}:"object"!=typeof b&&(console.warn("Deprecated: Expected third argument to be a object"),b={autoBom:!b}),b.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type)?new Blob(["\uFEFF",a],{type:a.type}):a}function c(a,b,c){var d=new XMLHttpRequest;d.open("GET",a),d.responseType="blob",d.onload=function(){g(d.response,b,c)},d.onerror=function(){console.error("could not download file")},d.send()}function d(a){var b=new XMLHttpRequest;b.open("HEAD",a,!1);try{b.send()}catch(a){}return 200<=b.status&&299>=b.status}function e(a){try{a.dispatchEvent(new MouseEvent("click"))}catch(c){var b=document.createEvent("MouseEvents");b.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),a.dispatchEvent(b)}}var f="object"==typeof window&&window.window===window?window:"object"==typeof self&&self.self===self?self:"object"==typeof global&&global.global===global?global:void 0,a=/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),g=f.saveAs||("object"!=typeof window||window!==f?function(){}:"download"in HTMLAnchorElement.prototype&&!a?function(b,g,h){var i=f.URL||f.webkitURL,j=document.createElement("a");g=g||b.name||"download",j.download=g,j.rel="noopener","string"==typeof b?(j.href=b,j.origin===location.origin?e(j):d(j.href)?c(b,g,h):e(j,j.target="_blank")):(j.href=i.createObjectURL(b),setTimeout(function(){i.revokeObjectURL(j.href)},4E4),setTimeout(function(){e(j)},0))}:"msSaveOrOpenBlob"in navigator?function(f,g,h){if(g=g||f.name||"download","string"!=typeof f)navigator.msSaveOrOpenBlob(b(f,h),g);else if(d(f))c(f,g,h);else{var i=document.createElement("a");i.href=f,i.target="_blank",setTimeout(function(){e(i)})}}:function(b,d,e,g){if(g=g||open("","_blank"),g&&(g.document.title=g.document.body.innerText="downloading..."),"string"==typeof b)return c(b,d,e);var h="application/octet-stream"===b.type,i=/constructor/i.test(f.HTMLElement)||f.safari,j=/CriOS\/[\d]+/.test(navigator.userAgent);if((j||h&&i||a)&&"undefined"!=typeof FileReader){var k=new FileReader;k.onloadend=function(){var a=k.result;a=j?a:a.replace(/^data:[^;]*;/,"data:attachment/file;"),g?g.location.href=a:location=a,g=null},k.readAsDataURL(b)}else{var l=f.URL||f.webkitURL,m=l.createObjectURL(b);g?g.location=m:location.href=m,g=null,setTimeout(function(){l.revokeObjectURL(m)},4E4)}});f.saveAs=g.saveAs=g,"undefined"!=typeof module&&(module.exports=g)});
+    </script>
+    <script>
+        // canvas-toBlob.min.js
+        !function(t){"use strict";var o,e=t.Uint8Array,n=t.HTMLCanvasElement,s=n&&n.prototype,i=/\s*;\s*base64\s*(?:;|$)/i,a="toDataURL",l=function(t){for(var n,s,i=t.length,a=new e(i/4*3|0),l=0,b=0,r=[0,0],f=0,B=0;i--;)s=t.charCodeAt(l++),255!==(n=o[s-43])&&void 0!==n&&(r[1]=r[0],r[0]=s,B=B<<6|n,4===++f&&(a[b++]=B>>>16,61!==r[1]&&(a[b++]=B>>>8),61!==r[0]&&(a[b++]=B),f=0));return a};e&&(o=new e([62,-1,-1,-1,63,52,53,54,55,56,57,58,59,60,61,-1,-1,-1,0,-1,-1,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,-1,-1,-1,-1,-1,-1,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51])),!n||s.toBlob&&s.toBlobHD||(s.toBlob||(s.toBlob=function(t,o){if(o||(o="image/png"),this.mozGetAsFile)t(this.mozGetAsFile("canvas",o));else if(this.msToBlob&&/^\s*image\/png\s*(?:$|;)/i.test(o))t(this.msToBlob());else{var n,s=Array.prototype.slice.call(arguments,1),b=this[a].apply(this,s),r=b.indexOf(","),f=b.substring(r+1),B=i.test(b.substring(0,r));Blob.fake?((n=new Blob).encoding=B?"base64":"URI",n.data=f,n.size=f.length):e&&(n=B?new Blob([l(f)],{type:o}):new Blob([decodeURIComponent(f)],{type:o})),t(n)}}),!s.toBlobHD&&s.toDataURLHD?s.toBlobHD=function(){a="toDataURLHD";var t=this.toBlob();return a="toDataURL",t}:s.toBlobHD=s.toBlob)}("undefined"!=typeof self&&self||"undefined"!=typeof window&&window||this.content||this);
+    </script>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #drop-area {
+            border: 2px dashed #ccc;
+            border-radius: 20px;
+            width: 50%;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #drop-area.highlight {
+            border-color: purple;
+        }
+        p {
+            margin-top: 0;
+        }
+        .drop-form {
+            margin-bottom: 10px;
+        }
+        .result {
+            margin-bottom: 10px;
+            text-align: center;
+            display: block;
+        }
+        #squareImg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .select-button {
+            display: inline-block;
+            padding: 10px;
+            background: #ddd;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .select-button:hover {
+            background: #ccc;
+        }
+        #fileElem {
+            display: none;
+        }
+        .download-button {
+            display: inline-block;
+            padding: 10px;
+            background-color: DodgerBlue;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            text-align: center;
+        }
+        .download-button:hover {
+            background-color: RoyalBlue;
+        }
+        #download {
+            display: none;
+        }
+        #download-label {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="drop-area">
+        <form class="drop-form">
+            <p>Drop image here or</p>
+            <input type="file" id="fileElem" accept="image/*" onchange="processFile(this.files[0])"/>
+            <label class="select-button" for="fileElem">Select image</label>
+        </form>
+    </div>
+
+    <span class="result" />
+        Color
+        <input id="bgColor" type="color" value="#ffffff" onchange="updateImage()"/></p>
+        <img id="squareImg" src="#" alt=""/></p>
+        <input type="button" id="download" class="download-button" onclick="download()">
+        <label id="download-label" class="download-button" for="download">Download</label></p>
+    </span>
+
+    <script>
+        
+        let dropArea = document.getElementById("drop-area")
+
+        // Prevent default drag behaviors
+        function preventDefaults (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        })
+
+        // Highlight drop area when item is dragged over it
+        function highlight(e) {
+            dropArea.classList.add('highlight');
+        }
+
+        function unhighlight(e) {
+            dropArea.classList.remove('highlight');
+        }
+
+        ;['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        })
+
+        ;['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        })
+
+        // Handle dropped files
+        function handleDrop(e) {
+            var dt = e.dataTransfer;
+            files = [...dt.files];
+            processFile(files[0]);
+        }
+
+        function processFile(file) {
+            fileName = file.name;
+            let reader = new FileReader();
+            reader.onloadend = function() {
+                img.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        function updateImage()
+        {
+            let xoffset = 0;
+            let yoffset = 0;
+
+            if (img.width > img.height) {
+                c.width = img.width;
+                c.height = img.width;
+                yoffset = (img.width - img.height)/2;
+            } else {
+                c.width = img.height;
+                c.height = img.height;
+                xoffset = (img.height - img.width)/2;
+            }
+            ctx.fillStyle = bgColor.value;
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, xoffset, yoffset);
+            squareImg.src = c.toDataURL("image/jpeg");
+            document.getElementById("download-label").style.display = "inline-block";
+        }
+
+        function download()
+        {
+            let fileNameA = fileName.split(/\.(?=[^\.]+$)/);
+            let sqFileName = fileNameA[0] + "-square";
+            if (fileNameA.length > 0)
+                sqFileName += "." + fileNameA[1];
+
+            console.log("download: " + sqFileName);
+            c.toBlob(function(blob) {
+                  saveAs(blob, sqFileName);
+            });
+        }
+
+        let c = document.createElement("canvas");
+        ctx = c.getContext("2d");
+        let img = document.createElement('img');
+        img.onload = updateImage;
+
+        let bgColor = document.getElementById("bgColor");
+        let squareImg = document.getElementById("squareImg");
+        let fileName = "";
+
+    </script>
+
+</body>
+</html>
